@@ -1,6 +1,6 @@
 package secretproject.board.vo;
 
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * @author hjhj43

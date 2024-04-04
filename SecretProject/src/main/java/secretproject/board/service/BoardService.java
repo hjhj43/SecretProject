@@ -12,6 +12,6 @@ public interface BoardService {
 	 * @return 글 목록
 	 * @exception Exception
 	 */
-	List<?> selectBoardList(BoardVO boardVO) throws Exception;
+	List<BoardVO> selectBoardList(BoardVO boardVO) throws Exception;
 
 }

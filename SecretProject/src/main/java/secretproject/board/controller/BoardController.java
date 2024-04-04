@@ -2,9 +2,11 @@ package secretproject.board.controller;
 
 import java.util.List;
 
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,11 +28,12 @@ public class BoardController {
 	 * @exception Exception
 	 */
 	@RequestMapping(value = "/BoardList.do")
-	public String selectBoardList(@ModelAttribute("boardVO") BoardVO boardVO, ModelMap model) throws Exception {
+	public String selectBoardList(@ModelAttribute("boardVO") BoardVO boardVO, Model model) throws Exception {
 
-		List<?> boardList = boardService.selectBoardList(boardVO);
-		model.addAttribute("resultList", boardList);
+		List<BoardVO> boardList = boardService.selectBoardList(boardVO);
+		model.addAttribute("boardList", boardList);
+		System.out.println(boardList);
 
-		return "board/BoardList";
-	}
+		return "board/boardList";
+	}	
 }
