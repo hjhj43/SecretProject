@@ -26,5 +26,25 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	public List<BoardVO> selectBoardList(BoardVO boardVO) throws Exception {
 		return boardDAO.selectBoardList(boardVO);
 	}
+	
+	@Override
+	public BoardVO selectDetail(int boardSn) throws Exception {
+		return boardDAO.selectDetail(boardSn);
+	}
+	
+	@Override
+	public void insertBoard(BoardVO boardVO) throws Exception {
+		boardDAO.insertBoard(boardVO);
+	}
+	
+	@Override
+	public void updateBoard(BoardVO boardVO) throws Exception {
+		boardDAO.updateBoard(boardVO);
+	}
+	
+	@Override
+	public void deleteBoard(int boardSn) throws Exception {
+		boardDAO.deleteBoard(boardSn);
+	}
 
 }

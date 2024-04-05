@@ -6,8 +6,15 @@
 <html>
 <head>
 <title>Board List</title>
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <!-- Bootstrap CSS -->
+	<link
+		href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+		rel="stylesheet"
+		integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+		crossorigin="anonymous">
+		<script  src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<style  type="text/css">
+</style>
 </head>
 <body>
     <br/>
@@ -15,6 +22,7 @@
     <br/>
     <br/>
     <div class="container">
+		<form id="boardForm" name="boardForm" method="post">
         <table class="table table-hover table-striped text-center" style="border:1px solid;">
 			<colgroup>
 				<col width="10%"/>
@@ -34,13 +42,14 @@
 			<c:forEach var="result" items="${boardList}">
                 <tr>
 					<td>${result.boardSn}</td>
-					<td>${result.boardTitle}</td>
+					<td><a href="BoardDetail.do?boardSn=${result.boardSn}">${result.boardTitle}</a></td>
 					<td>${result.boardRegisterId}</td>
 					<td>${result.boardDate}</td>
 				</tr>
             </c:forEach>
 			</tbody>
 			</table>
+			</form>
         <hr/>
         <!-- <div>
             <ul class="pagination justify-content-center">
@@ -52,8 +61,25 @@
                 <li><a href="#" style="margin-right:5px;" class="text-secondary">5</a></li>
                 <li><a href="#" style="margin-right:5px;" class="text-secondary">▶</a></li>
             </ul>
-        </div>
-        <a class="btn btn-outline-info" style="float:right">글쓰기</a> -->
+        </div> -->
     </div>
+	<script
+		 src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js"
+		 integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj"
+		 crossorigin="anonymous"></script>
+	<div>
+		<button onclick="location='BoardRegister.do'">글작성</button>
+	</div>
+	<br>
 </body>
+<script type="text/javascript">
+	function fn_view(boardSn) {
+		var form = document.getElementById("boardForm");
+		var url = "<c:url value='/BoardDetail.do'/>";
+		url = url + "?boardSn=" + boardSn;
+
+		form.action = url;
+		form.submit();
+	}
+</script>
 </html>

@@ -8,6 +8,7 @@ import lombok.Data;
  * @author hjhj43
  *
  */
+
 @Data
 public class BoardVO {
 	
