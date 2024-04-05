@@ -83,6 +83,12 @@
 			<artifactId>egovframework.rte.fdl.property</artifactId>
 			<version>${egovframework.rte.version}</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-core -->
+		<dependency>
+		    <groupId>org.springframework.security</groupId>			<!-- jelly 라이브러리 추가 spring 암호화 관련 로직 여기에서 쓸것. -->
+		    <artifactId>spring-security-core</artifactId>
+		    <version>4.2.11.RELEASE</version>
+		</dependency>
 
        <dependency>
 			<groupId>javax.servlet</groupId>
