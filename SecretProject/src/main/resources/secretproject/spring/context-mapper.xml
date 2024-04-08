@@ -9,7 +9,7 @@
 		<property name="configLocation"
 			value="classpath:/secretproject/sqlmap/sql-mapper-config.xml" />
 		<property name="mapperLocations"
-			value="classpath:/secretproject/sqlmap/board/mappers/*.xml" />
+			value="classpath:/secretproject/sqlmap/**/mappers/*.xml" />
 	</bean>
 	<!-- <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate"> -->
 	<!-- <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/> -->
