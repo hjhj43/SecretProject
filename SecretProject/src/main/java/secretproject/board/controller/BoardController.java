@@ -4,16 +4,22 @@ import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springmodules.validation.bean.BeanValidator;
 
 import secretproject.board.service.BoardService;
 import secretproject.board.vo.BoardVO;
 
+@Validated
 @Controller
 public class BoardController {
 	
@@ -48,7 +54,6 @@ public class BoardController {
 		log.info("BoardList ==>> {}",boardList);
 		
 		log.info("/BoardList.do Ended");                                         //예시 로그
-		
 
 		return "board/boardList";
 	}	
@@ -72,7 +77,7 @@ public class BoardController {
 	
 	// 게시글 작성
 	@RequestMapping(value="/insertBoard.do")
-	public String write(@ModelAttribute("boardVO") BoardVO boardVO) throws Exception {
+	public String write(  @NotEmpty(message = "Input movie list cannot be empty.") @ModelAttribute("boardVO") @Valid BoardVO boardVO) throws Exception {
 		boardService.insertBoard(boardVO);
 		return "redirect:BoardList.do";
 	}
