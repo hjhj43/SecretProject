@@ -21,5 +21,7 @@ public interface BoardService {
 	public void updateBoard(BoardVO boardVO) throws Exception;
 
 	public void deleteBoard(int boardSn) throws Exception;
+	
+	public int getTotCntBoard() throws Exception;
 
 }

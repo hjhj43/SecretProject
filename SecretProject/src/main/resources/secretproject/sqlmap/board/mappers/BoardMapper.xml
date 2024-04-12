@@ -4,8 +4,10 @@
 
 	<!-- 게시글 목록 조회 -->
 	<select id="selectBoardList" parameterType="boardVO" resultType="boardVO">
-		SELECT BOARD_SN, BOARD_TITLE, BOARD_REGISTER_ID, BOARD_DATE
-		FROM board
+		<include refid="CommonMapper.pagingHead" />
+			SELECT BOARD_SN, BOARD_TITLE, BOARD_REGISTER_ID, BOARD_DATE
+			FROM board
+		<include refid="CommonMapper.pagingTail" />
 	</select>
 	
 	<!-- 게시글 상세보기 -->
@@ -33,5 +35,12 @@
 		DELETE FROM board
 		WHERE BOARD_SN = #{boardSn}
 	</delete>
+	
+	<select id="getTotCntBoard" parameterType="boardVO" resultType="int">
+		SELECT
+			COUNT(*)			
+		FROM 
+			BOARD
+	</select>
 	
 </mapper>

@@ -7,25 +7,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.hibernate.validator.constraints.NotEmpty;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springmodules.validation.bean.BeanValidator;
 
+import lombok.extern.slf4j.Slf4j;
 import secretproject.board.service.BoardService;
 import secretproject.board.vo.BoardVO;
+import secretproject.cmmn.vo.DefaultVO;
 
+@Slf4j
 @Validated
 @Controller
 public class BoardController {
-	
-	private static final org.slf4j.Logger log = LoggerFactory.getLogger(BoardController.class);    //로거 생성
-
-	
 	
 	@Resource(name = "boardService")
 	private BoardService boardService;
@@ -47,13 +43,20 @@ public class BoardController {
 		
 		log.info("/BoardList.do started");										//예시 로그
 		
+		int boardCnt = boardService.getTotCntBoard();							//전체 카운트 구한다.
 		
-		List<BoardVO> boardList = boardService.selectBoardList(boardVO);
+		boardVO.setTotalRowCount(boardCnt);										//전체 ROW 세팅
+		boardVO.setUpPagination();												//페이징  셋업
+		
+		List<BoardVO> boardList = boardService.selectBoardList(boardVO);		//페이징 세팅 값을 들고 selectBoard해옴
+		
+		DefaultVO pagingVO = boardVO;											//DefaultVO (페이징 및 검색기능 있음)으로 캐스팅
+		
 		model.addAttribute("boardList", boardList);
+		model.addAttribute("boardPagingVO", pagingVO);							//페이징용 VO
 		
-		log.info("BoardList ==>> {}",boardList);
-		
-		log.info("/BoardList.do Ended");                                         //예시 로그
+		log.info("BoardList ==>> {}",boardList);								
+		log.info("/BoardList.do Ended");                                        //예시 로그
 
 		return "board/boardList";
 	}	
@@ -78,7 +81,11 @@ public class BoardController {
 	// 게시글 작성
 	@RequestMapping(value="/insertBoard.do")
 	public String write(  @NotEmpty(message = "Input movie list cannot be empty.") @ModelAttribute("boardVO") @Valid BoardVO boardVO) throws Exception {
+		
+		
 		boardService.insertBoard(boardVO);
+		
+		
 		return "redirect:BoardList.do";
 	}
 	

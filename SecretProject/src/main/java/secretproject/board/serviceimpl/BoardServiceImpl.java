@@ -7,10 +7,12 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import secretproject.board.dao.BoardDAO;
 import secretproject.board.service.BoardService;
 import secretproject.board.vo.BoardVO;
 
+@Slf4j
 @Service("boardService")
 public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardService {
 	
@@ -45,6 +47,16 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	@Override
 	public void deleteBoard(int boardSn) throws Exception {
 		boardDAO.deleteBoard(boardSn);
+	}
+
+	@Override
+	public int getTotCntBoard() throws Exception {
+		int totalCountOfBoard = 0;
+		
+		totalCountOfBoard = boardDAO.getTotCntBoard();
+		log.info("totalCountOfBoard ==>{}",totalCountOfBoard);
+		
+		return totalCountOfBoard;
 	}
 
 }

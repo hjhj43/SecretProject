@@ -24,6 +24,7 @@
     <div class="container">
 		<form id="boardForm" name="boardForm" method="post">
         <table class="table table-hover table-striped text-center" style="border:1px solid;">
+			<input type="hidden" name="curPage" value="1" />
 			<colgroup>
 				<col width="10%"/>
 				<col width="50%"/>
@@ -51,6 +52,38 @@
 			</table>
 			</form>
         <hr/>
+
+<!-- TODO:  페이징에 필요한 요소들 파악 후  fn_pagination 분석 후 구현  -->
+		<nav aria-label="Page navigation example">
+			<ul class="pagination justify-content-center">
+				<li class="page-item <c:if test="${1 eq boardPagingVO.curPage}">disabled</c:if>">
+					<a class="page-link" href="javascript:fn_pagination('1')" tabindex="-1" aria-disabled="true">처음으로</a>
+				</li>
+				
+				<li class="page-item <c:if test="${1 eq boardPagingVO.firstPage}">disabled</c:if>">
+					<a class="page-link" href="javascript:fn_pagination('<c:out value="${boardPagingVO.firstPage-1}"/>')" aria-disabled="true">이전</a>
+				</li>
+
+				<c:forEach begin="${boardPagingVO.firstPage }" end="${boardPagingVO.lastPage }" var="i">
+					<c:if test="${i eq boardPagingVO.curPage }">
+						<li class="page-item active"><a class="page-link" href="#">${i }</a></li>
+					</c:if>
+					<c:if test="${i ne boardPagingVO.curPage }">
+						<li class="page-item"><a class="page-link" href="javascript:fn_pagination('${i}')">${i}</a></li>
+					</c:if>
+				</c:forEach>
+
+				<li class="page-item <c:if test="${boardPagingVO.totalPageCount eq boardPagingVO.lastPage}">disabled</c:if>">
+					<a class="page-link" href="javascript:fn_pagination('<c:out value="${boardPagingVO.lastPage+1}"/>')">다음</a>
+				</li>
+				
+				<li class="page-item <c:if test="${boardPagingVO.totalPageCount eq boardPagingVO.curPage}">disabled</c:if>">
+					<a class="page-link" href="javascript:fn_pagination('<c:out value="${boardPagingVO.totalPageCount}"/>')">마지막으로</a>
+				</li>
+			</ul>
+
+		</nav>
+		
         <!-- <div>
             <ul class="pagination justify-content-center">
                 <li><a href="#" style="margin-right:5px;" class="text-secondary">◀</a></li>

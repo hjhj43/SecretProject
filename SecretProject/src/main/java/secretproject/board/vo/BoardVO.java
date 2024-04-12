@@ -5,18 +5,19 @@ import java.sql.Date;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import lombok.Data;
+import secretproject.cmmn.vo.DefaultVO;
 
 /**
  * @author hjhj43
  *
  */
-
 @Data
-public class BoardVO {
+@SuppressWarnings("serial")
+public class BoardVO extends DefaultVO{
 	
 	private int boardSn; // 게시글 순번
 
-    @NotEmpty(message = "Movie name cannot be empty.")
+    @NotEmpty(message = "Board title cannot be empty.")
 	private String boardTitle; // 게시글 제목
 
 	@NotEmpty

@@ -49,4 +49,10 @@ public class BoardDAO {
 	public void deleteBoard(int boardSn) throws Exception {
 		mapper.deleteBoard(boardSn);
 	}
+	
+	public int getTotCntBoard() throws Exception{
+		return mapper.getTotCntBoard();
+	}
+	
+	
 }
