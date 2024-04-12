@@ -63,20 +63,31 @@
         </form>
     </div>
 	<div>
-		<button onclick="userRegister()">가입</button>
+		<button id="btnRegister" onclick="userRegister()">가입</button>
 		<button onclick="location='UserList.do'">이전</button>
 	</div>
 	<br>
 </body>
 <script>
+		const button = document.getElementById('btnRegister');
+		
 		function userRegister(){
+			
 			if (confirm("회원가입을 하시겠습니까?") == true) {
+/* 				if (!idRegex.test(userId)) {
+			        alert("아이디는 5~20자의 영문 소문자, 대문자, 숫자, 특수기호(_),(-)로 이루어져야 합니다.");
+			        return;
+			    } */
 				$("#registUser").submit();
 			} else {
 				return;
 			}
 		}
+		
 		function CheckId(){
+			
+		    var idRegex = /^[a-z0-9]{5,20}$/; // 5~20자의 영문 소문자, 대문자, 숫자, 특수기호(_),(-)만 허용
+
 				$.ajax({
 					url : "/idCheck.do",
 					type : "post",
@@ -86,8 +97,12 @@
 						if(data == 1){
 							alert("중복된 아이디입니다.");
 						}else if(data == 0){
-						//	$("#idCheck").attr("value", "Y");
+/* 							if (!idRegex.test(userId)) {
+						        alert("아이디는 5~20자의 영문 소문자, 대문자, 숫자, 특수기호(_),(-)로 이루어져야 합니다.");
+						        return;
+						    } */
 							alert("사용가능한 아이디입니다.");
+							$("#idCheck").attr("value", "Y");
 						}
 					}
 				})

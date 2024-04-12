@@ -41,7 +41,7 @@
 					</tr>
 					<tr>
 						<th>비밀번호</th>
-						<td><input name="userPw" class="form-control" type="text" value="${userList.userPw}"
+						<td><input name="userPw" class="form-control" type="text"
 							style="height: 200px;"></td>
 					</tr>
 					<tr>

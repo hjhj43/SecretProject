@@ -10,7 +10,7 @@
 	
 	<!-- 회원정보 상세보기 -->
 	<select id="selectDetail" parameterType="String" resultType="userVO">
-		SELECT *
+		SELECT USER_ID, USER_PW, USER_NAME, USER_EMAIL, USER_PHONE
 		FROM user
 		WHERE USER_ID = #{userId}
 	</select>
@@ -21,9 +21,17 @@
 		VALUES(#{userId},#{userPw},#{userName},#{userEmail},#{userPhone})
 	</insert>
 	
-	<select id="idCheck" resultType="int">
+	<!-- 아이디 중복 체크 -->
+	<select id="idCheck" parameterType="userVO" resultType="int">
 		SELECT COUNT(*) FROM user
-		WEHRE USER_ID = #{userId}
+		WHERE USER_ID = #{userId}
+	</select>
+	
+	<!-- 로그인 -->
+	<select id="getUserData" resultType="userVO">
+		SELECT USER_ID, USER_PW
+		FROM user
+		WHERE USER_ID = #{userId}
 	</select>
 	
 	<!-- 회원정보 수정 -->

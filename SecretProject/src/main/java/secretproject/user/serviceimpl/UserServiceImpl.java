@@ -37,6 +37,11 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements UserServ
 		int result = userDAO.idCheck(userVO);
 		return result;
 	}
+	
+	@Override
+	public UserVO getUserData(UserVO userVO) throws Exception {
+		return userDAO.getUserData(userVO);
+	}
 
 	@Override
 	public void updateUser(UserVO userVO) throws Exception {

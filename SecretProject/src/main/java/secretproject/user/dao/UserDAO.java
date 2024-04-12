@@ -37,8 +37,12 @@ public class UserDAO {
 		}
 		
 		public int idCheck(UserVO userVO) throws Exception {
-			int result = mapper.selectOne(userVO);
+			int result = mapper.idCheck(userVO);
 			return result;
+		}
+		
+		public UserVO getUserData(UserVO userVO) throws Exception {
+			return mapper.getUserData(userVO);
 		}
 		
 		public void updateUser(UserVO userVO) throws Exception {

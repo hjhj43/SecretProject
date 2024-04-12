@@ -12,7 +12,7 @@
 	
 	<!-- 게시글 상세보기 -->
 	<select id="selectDetail" parameterType="Integer" resultType="boardVO">
-		SELECT *
+		SELECT BOARD_SN, BOARD_TITLE, BOARD_CONTENT, BOARD_REGISTER_ID, BOARD_DATE
 		FROM board
 		WHERE BOARD_SN = #{BOARD_SN}
 	</select>
@@ -20,7 +20,7 @@
 	<!-- 게시글 삽입 -->
 	<insert id="insertBoard" parameterType="boardVO">
 		INSERT INTO board(BOARD_SN, BOARD_TITLE, BOARD_CONTENT, BOARD_REGISTER_ID, BOARD_DATE)
-		VALUES(NEXTVAL(board_sn),#{boardTitle},#{boardContent},'hjhj43',now())
+		VALUES(NEXTVAL(board_sn),#{boardTitle},#{boardContent},'anna429',now())
 	</insert>
 	
 	<!-- 게시글 수정 -->

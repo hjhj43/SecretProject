@@ -14,7 +14,9 @@ public interface UserMapper {
 	
 	public void insertUser(UserVO userVO) throws Exception;
 	
-	public int selectOne(UserVO userVO) throws Exception;
+	public int idCheck(UserVO userVO) throws Exception;
+	
+	public UserVO getUserData(UserVO userVO) throws Exception;
 	 
 	public void updateUser(UserVO userVO) throws Exception;
 	
