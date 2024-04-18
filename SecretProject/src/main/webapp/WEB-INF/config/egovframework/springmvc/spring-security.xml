@@ -8,4 +8,25 @@
     http://www.springframework.org/schema/security/spring-security.xsd">
       
     <beans:bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" /> 
-</beans:beans>
+    
+    <beans:bean id="passwordEncoder" class="egovframework.rte.fdl.cryptography.EgovPasswordEncoder">
+  		<beans:property name="algorithm" value="SHA-256" /><!-- default : SHA-256 -->
+  		<beans:property name="hashedPassword" value="gdyYs/IZqY86VcWhT8emCYfqY1ahw2vtLG+/FzNqtrQ=" />
+  	</beans:bean>
+ 
+	<beans:bean id="ARIACryptoService" class="egovframework.rte.fdl.cryptography.impl.EgovARIACryptoServiceImpl">
+  		<beans:property name="passwordEncoder" ref="passwordEncoder" />
+  		<beans:property name="blockSize" value="1025" /><!-- default : 1024 -->
+  	</beans:bean>
+ 
+	<beans:bean id="digestService" class="egovframework.rte.fdl.cryptography.impl.EgovDigestServiceImpl">
+  		<beans:property name="algorithm" value="SHA-256" /><!-- default : SHA-256 -->
+  		<beans:property name="plainDigest" value="false" /><!-- default : false -->
+  	</beans:bean>
+ 
+	<beans:bean id="generalCryptoService" class="egovframework.rte.fdl.cryptography.impl.EgovGeneralCryptoServiceImpl">
+ 		<beans:property name="passwordEncoder" ref="passwordEncoder" />
+  		<beans:property name="algorithm" value="PBEWithSHA1AndDESede" /><!-- default : PBEWithSHA1AndDESede -->
+  		<beans:property name="blockSize" value="1024" /><!-- default : 1024 -->
+  	</beans:bean>
+	</beans:beans>

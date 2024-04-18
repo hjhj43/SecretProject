@@ -4,8 +4,10 @@
 
 	<!-- 회원 목록 조회 -->
 	<select id="selectUserList" parameterType="userVO" resultType="userVO">
-		SELECT USER_ID, USER_NAME, USER_EMAIL, USER_PHONE
-		FROM user
+		<include refid="CommonMapper.pagingHead" />
+			SELECT USER_ID, USER_NAME, USER_EMAIL, USER_PHONE
+			FROM user
+		<include refid="CommonMapper.pagingTail" />
 	</select>
 	
 	<!-- 회원정보 상세보기 -->
@@ -47,5 +49,12 @@
 		DELETE FROM user
 		WHERE USER_ID = #{userId}
 	</delete>
+	
+	<select id="getTotCntUser" parameterType="userVO" resultType="int">
+		SELECT
+			COUNT(*)			
+		FROM 
+			user
+	</select>
 	
 </mapper>

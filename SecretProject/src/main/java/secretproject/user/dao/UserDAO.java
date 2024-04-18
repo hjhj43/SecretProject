@@ -52,4 +52,8 @@ public class UserDAO {
 		public void deleteUser(String userId) throws Exception {
 			mapper.deleteUser(userId);
 		}
+
+		public int getTotCntUser() throws Exception {
+			return mapper.getTotCntUser();
+		}
 	}

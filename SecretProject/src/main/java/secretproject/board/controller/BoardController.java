@@ -82,7 +82,6 @@ public class BoardController {
 	@RequestMapping(value="/insertBoard.do")
 	public String write(  @NotEmpty(message = "Input movie list cannot be empty.") @ModelAttribute("boardVO") @Valid BoardVO boardVO) throws Exception {
 		
-		
 		boardService.insertBoard(boardVO);
 		
 		

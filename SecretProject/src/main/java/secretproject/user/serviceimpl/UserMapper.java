@@ -22,4 +22,6 @@ public interface UserMapper {
 	
 	public void deleteUser(String userId) throws Exception;
 
+	public int getTotCntUser() throws Exception;
+
 }

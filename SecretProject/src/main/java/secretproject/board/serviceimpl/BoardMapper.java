@@ -19,6 +19,6 @@ public interface BoardMapper {
 
 	public void deleteBoard(int boardSn) throws Exception;
 
-	public int getTotCntBoard()throws Exception;
+	public int getTotCntBoard() throws Exception;
 
 }

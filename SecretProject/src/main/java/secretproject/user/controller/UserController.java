@@ -1,20 +1,22 @@
 package secretproject.user.controller;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+//import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotEmpty;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,14 +24,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springmodules.validation.commons.DefaultBeanValidator;
 
+import lombok.extern.slf4j.Slf4j;
+import secretproject.cmmn.service.CryptoService;
+import secretproject.cmmn.vo.DefaultVO;
 import secretproject.user.service.UserService;
 import secretproject.user.vo.UserVO;
 
+@Slf4j
 @Validated
 @Controller
 public class UserController {
-	
-	private static final org.slf4j.Logger log = LoggerFactory.getLogger(UserController.class);    //로거 생성
 	
 	@Resource(name = "userService")
 	private UserService userService;
@@ -41,12 +45,30 @@ public class UserController {
 	@Resource(name = "beanValidator")
 	protected DefaultBeanValidator beanValidator;
 	
+	@Resource(name = "cryptoService")
+	private CryptoService cryptoService;
+	
 	//회원정보 조회
 	@RequestMapping(value = "/UserList.do")
 	public String selectUserList(@ModelAttribute("userVO") UserVO userVO, Model model) throws Exception {
 		
+		int userCnt = userService.getTotCntUser();
+		
+		userVO.setTotalRowCount(userCnt);
+		userVO.setUpPagination();
+		
 		List<UserVO> userList = userService.selectUserList(userVO);
+		for(UserVO userVo : userList) {
+			String userPhone = userVo.getUserPhone();
+			String decryptedPhone = cryptoService.decryptData(userPhone);
+			String maskPhone = phoneMasking(decryptedPhone);
+			userVo.setUserPhone(maskPhone);
+		}
+		
+		DefaultVO pagingVO = userVO;
+		
 		model.addAttribute("userList", userList);
+		model.addAttribute("userPagingVO", pagingVO);
 		
 		return "user/userList";
 	}
@@ -57,8 +79,29 @@ public class UserController {
 		String userId = request.getParameter("userId");
 		
 		UserVO userVO = userService.selectDetail(userId);
+		String userPhone = userVO.getUserPhone();
+		String decryptedPhone = cryptoService.decryptData(userPhone);
+		String maskPhone = phoneMasking(decryptedPhone);
+		userVO.setUserPhone(maskPhone);
+		
 		model.addAttribute("userList", userVO);
 		return "user/userDetail";
+	}
+	
+	// 전화번호 마스킹
+	public static String phoneMasking(String userPhone) throws Exception {
+	    String regex = "(\\d{2,3})-?(\\d{3,4})-?(\\d{4})$";
+
+	    Matcher matcher = Pattern.compile(regex).matcher(userPhone);
+	    if(matcher.find()) {
+	        String target = matcher.group(2);
+	        int length = target.length();
+	        char[] c = new char[length];
+	        Arrays.fill(c, '*');
+
+	        return userPhone.replace(target, String.valueOf(c));
+	    }
+	    return userPhone;
 	}
 	
 	// 회원가입 페이지
@@ -69,7 +112,7 @@ public class UserController {
 	
 	// 회원가입
 	@RequestMapping(value="/insertUser.do")
-	public String write(@NotEmpty @ModelAttribute("userVO") @Valid UserVO userVO, Model model) throws Exception {
+	public String write( @NotEmpty(message = ".") @ModelAttribute("userVO") @Valid UserVO userVO) throws Exception {
 		int result = userService.idCheck(userVO);
 		try {
 			if (result == 1) {
@@ -77,8 +120,12 @@ public class UserController {
 			} else if (result == 0) {
 
 				String inputPw = userVO.getUserPw();
-				String pwd = pwdEncoder.encode(inputPw);
-				userVO.setUserPw(pwd);
+				String pw = pwdEncoder.encode(inputPw);
+				userVO.setUserPw(pw);
+				
+				String userPhone = userVO.getUserPhone();    	
+		    	String encryptedPhone = cryptoService.encryptData(userPhone);
+		    	userVO.setUserPhone(encryptedPhone);
 				
 				userService.insertUser(userVO);
 			}
@@ -138,6 +185,10 @@ public class UserController {
 		String inputPw = userVO.getUserPw();
 		String pwd = pwdEncoder.encode(inputPw);
 		userVO.setUserPw(pwd);
+		
+		String userPhone = userVO.getUserPhone();    	
+    	String encryptedPhone = cryptoService.encryptData(userPhone);
+    	userVO.setUserPhone(encryptedPhone);
 		
 		userService.updateUser(userVO);
 		return "redirect:UserDetail.do?userId="+userVO.getUserId();

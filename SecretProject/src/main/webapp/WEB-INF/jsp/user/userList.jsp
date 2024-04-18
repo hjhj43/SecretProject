@@ -53,6 +53,36 @@
 			</table>
 			</form>
         <hr/>
+
+		<nav aria-label="Page navigation example">
+			<ul class="pagination justify-content-center">
+				<li class="page-item <c:if test="${1 eq userPagingVO.curPage}">disabled</c:if>">
+					<a class="page-link" href="javascript:fn_pagination('1')" tabindex="-1" aria-disabled="true">처음으로</a>
+				</li>
+				
+				<li class="page-item <c:if test="${1 eq userPagingVO.firstPage}">disabled</c:if>">
+					<a class="page-link" href="javascript:fn_pagination('<c:out value="${userPagingVO.firstPage-1}"/>')" aria-disabled="true">이전</a>
+				</li>
+
+				<c:forEach begin="${userPagingVO.firstPage }" end="${userPagingVO.lastPage }" var="i">
+					<c:if test="${i eq userPagingVO.curPage }">
+						<li class="page-item active"><a class="page-link" href="#">${i }</a></li>
+					</c:if>
+					<c:if test="${i ne userPagingVO.curPage }">
+						<li class="page-item"><a class="page-link" href="javascript:fn_pagination('${i}')">${i}</a></li>
+					</c:if>
+				</c:forEach>
+
+				<li class="page-item <c:if test="${userPagingVO.totalPageCount eq userPagingVO.lastPage}">disabled</c:if>">
+					<a class="page-link" href="javascript:fn_pagination('<c:out value="${userPagingVO.lastPage+1}"/>')">다음</a>
+				</li>
+				
+				<li class="page-item <c:if test="${userPagingVO.totalPageCount eq userPagingVO.curPage}">disabled</c:if>">
+					<a class="page-link" href="javascript:fn_pagination('<c:out value="${userPagingVO.totalPageCount}"/>')">마지막으로</a>
+				</li>
+			</ul>
+
+		</nav>
     </div>
 	<script
 		 src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js"
@@ -71,6 +101,10 @@
 
 		form.action = url;
 		form.submit();
+	}
+	
+	function fn_pagination(curPage){
+		location.href="/UserList.do?curPage="+curPage;
 	}
 </script>
 </html>

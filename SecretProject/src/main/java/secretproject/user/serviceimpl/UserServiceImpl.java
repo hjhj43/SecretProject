@@ -7,10 +7,13 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import lombok.extern.slf4j.Slf4j;
+import secretproject.board.serviceimpl.BoardServiceImpl;
 import secretproject.user.dao.UserDAO;
 import secretproject.user.service.UserService;
 import secretproject.user.vo.UserVO;
 
+@Slf4j
 @Service("userService")
 public class UserServiceImpl extends EgovAbstractServiceImpl implements UserService {
 	
@@ -51,6 +54,16 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements UserServ
 	@Override
 	public void deleteUser(String userId) throws Exception {
 		userDAO.deleteUser(userId);
+	}
+
+	@Override
+	public int getTotCntUser() throws Exception {
+		int totalCountOfUser = 0;
+		
+		totalCountOfUser = userDAO.getTotCntUser();
+		log.info("totalCountOfUser ==>{}",totalCountOfUser);
+		
+		return totalCountOfUser;
 	}
 
 }
