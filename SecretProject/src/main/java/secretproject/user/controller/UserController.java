@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,6 +59,7 @@ public class UserController {
 		userVO.setUpPagination();
 		
 		List<UserVO> userList = userService.selectUserList(userVO);
+		
 		for(UserVO userVo : userList) {
 			String userPhone = userVo.getUserPhone();
 			String decryptedPhone = cryptoService.decryptData(userPhone);
@@ -112,12 +114,17 @@ public class UserController {
 	
 	// 회원가입
 	@RequestMapping(value="/insertUser.do")
-	public String write( @NotEmpty(message = ".") @ModelAttribute("userVO") @Valid UserVO userVO) throws Exception {
+	public String write( @NotEmpty(message = ".") @ModelAttribute("userVO") @Valid UserVO userVO, BindingResult bindingResult, Model model) throws Exception {
 		int result = userService.idCheck(userVO);
 		try {
 			if (result == 1) {
 				return "user/userRegister";
 			} else if (result == 0) {
+				
+				if (bindingResult.hasErrors()) {
+			        log.info("errors={}", bindingResult);
+					return "user/userRegister";
+			    }
 
 				String inputPw = userVO.getUserPw();
 				String pw = pwdEncoder.encode(inputPw);

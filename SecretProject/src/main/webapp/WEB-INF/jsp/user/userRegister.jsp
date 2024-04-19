@@ -79,6 +79,7 @@
 				if ($("#idCheck").val()=="N"){
 					alert("아이디 중복 검사를 해주세요.");
 				} else {
+					 validation();
 					$("#registUser").submit();
 				}
 			} else {
@@ -102,6 +103,70 @@
 						}
 					}
 				})
+		}
+		
+ 		function validation() {
+			var userId = document.getElementById("userId")
+			var userPw = document.getElementById("userPw")
+			var userName = document.getElementById("userName")
+			var userEmail = document.getElementById("userEmail")
+			var userPhone = document.getElementById("userPhone")
+			
+			var regIdPw = /^[a-z0-9]{5,20}$/;
+			var regName = /^[가-힣a-zA-Z]{2,15}$/;
+			var regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
+			var regPhone = /^\\d{2,3}-\\d{3,4}-\\d{4}$/;
+			
+			// 아이디 확인
+			if(userId.value == ""){
+				alert("아이디를 입력하세요.");
+				userId.focus();
+				return false;
+			} else if (!regIdPw.test(userId.value)){
+				alert("아이디는 5~20자 영문 소문자, 숫자만 입력하세요.");
+				userId.focus();
+				return false;
+			}
+			// 비밀번호 확인
+			if(userPw.value == ""){
+				alert("비밀번호를 입력하세요.");
+				userPw.focus();
+				return false;
+			} else if (!regIdPw.test(userPw.value)){
+				alert("비밀번호는 5~20자 영문 소문자, 숫자만 입력하세요.");
+				userPw.focus();
+				return false;
+			}
+			// 이름 확인
+			if(userName.value == ""){
+				alert("이름을 입력하세요.");
+				userName.focus();
+				return false;
+			} else if (!regName.test(userName.value)){
+				alert("이름은 2~15자 한글과 영어만 입력하세요.");
+				userName.focus();
+				return false;
+			}
+			// 이메일 확인
+			if(userEmail.value == ""){
+				alert("이메일을 입력하세요.");
+				userEmail.focus();
+				return false;
+			} else if (!regEmail.test(userEmail.value)){
+				alert("잘못된 이메일 형식입니다.");
+				userEmail.focus();
+				return false;
+			}
+			// 전화번호 확인
+			if(userPhone.value == ""){
+				alert("전화번호를 입력하세요.");
+				userPhone.focus();
+				return false;
+			} else if (!regPhone.test(userPhone.value)){
+				alert("잘못된 전화번호 형식입니다.");
+				userPhone.focus();
+				return false;
+			}
 		}
 		
 </script>

@@ -17,9 +17,11 @@ public class UserVO extends DefaultVO{
 	private String userId; // 유저 아이디
 	
 	@NotEmpty
+	@Pattern(regexp = "^[a-z0-9]{5,20}+$")
 	private String userPw; // 유저 비밀번호
 
 	@NotEmpty
+	@Pattern(regexp = "^[가-힣a-zA-Z]{2,15}$")
 	private String userName; // 유저 이름
 	
 	@NotEmpty
