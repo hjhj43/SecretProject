@@ -41,7 +41,7 @@
 					</tr>
 					<tr>
 						<th>비밀번호</th>
-						<td><input name="userPw" class="form-control" type="text"
+						<td><input name="userPw" class="form-control" type="text" 
 							style="height: 200px;"></td>
 					</tr>
 					<tr>
@@ -58,6 +58,11 @@
 						<th>핸드폰번호</th>
 						<td><input name="userPhone" class="form-control" type="text" value="${userList.userPhone}"
 							style="height: 200px;"></td>
+					</tr>
+					<tr>
+						<th>권한</th>
+						<td><input name="userAuthName" class="form-control" type="text" value="${userList.authName}"
+							style="height: 200px;" readonly></td>
 					</tr>
 				</tbody>
 			</table>

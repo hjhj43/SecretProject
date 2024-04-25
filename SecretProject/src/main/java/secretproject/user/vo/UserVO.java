@@ -12,7 +12,7 @@ import secretproject.cmmn.vo.DefaultVO;
 @SuppressWarnings("serial")
 public class UserVO extends DefaultVO{
 	
-	@NotEmpty(message = "Movie name cannot be empty.")
+	@NotEmpty
 	@Pattern(regexp = "^[a-z0-9]{5,20}+$")
 	private String userId; // 유저 아이디
 	
@@ -31,5 +31,9 @@ public class UserVO extends DefaultVO{
 	@NotEmpty
 	@Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$")
 	private String userPhone; // 유저 핸드폰번호
+	
+	private int userAuthNum;
+	
+	private String authName;
 
 }
