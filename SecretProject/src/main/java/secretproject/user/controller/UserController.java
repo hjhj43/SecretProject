@@ -1,5 +1,6 @@
 package secretproject.user.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -18,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -83,8 +85,8 @@ public class UserController {
 		UserVO userVO = userService.selectDetail(userId);
 		String userPhone = userVO.getUserPhone();
 		String decryptedPhone = cryptoService.decryptData(userPhone);
-		String maskPhone = phoneMasking(decryptedPhone);
-		userVO.setUserPhone(maskPhone);
+//		String maskPhone = phoneMasking(decryptedPhone);
+		userVO.setUserPhone(decryptedPhone);
 		
 		model.addAttribute("userList", userVO);
 		return "user/userDetail";
@@ -123,6 +125,15 @@ public class UserController {
 				
 				if (bindingResult.hasErrors()) {
 			        log.info("errors={}", bindingResult);
+
+			        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+			        
+			        if(fieldErrors.size()>0) {
+			        	for(FieldError error: fieldErrors) {
+			        		model.addAttribute("errors", error.getDefaultMessage());
+			        		System.out.println(error.getDefaultMessage());
+			        	}
+			        }
 					return "user/userRegister";
 			    }
 
@@ -133,7 +144,7 @@ public class UserController {
 				String userPhone = userVO.getUserPhone();    	
 		    	String encryptedPhone = cryptoService.encryptData(userPhone);
 		    	userVO.setUserPhone(encryptedPhone);
-				
+		    	
 				userService.insertUser(userVO);
 			}
 		} catch (Exception e) {
@@ -167,15 +178,17 @@ public class UserController {
 		boolean isPwMatch = pwdEncoder.matches(userVO.getUserPw(), userData.getUserPw());
 		
 		log.info("isPwMatch {}", isPwMatch);
+		
 		if(isPwMatch==true) {
 			userData.setUserPw(null);
 			session.setAttribute("sessionUserData", userData);
-			
+			log.info("로그인 성공 {}", userData);
 		} else {
 			session.setAttribute("sessionUserData", null);
+			log.info("로그인 실패 {}", userData);
 			return "user/userLogin";
 		}
-		return "redirect:/";
+		return "redirect:UserList.do";
 	}
 	
 /*	// 로그아웃
@@ -186,18 +199,24 @@ public class UserController {
 	}*/
 
 	
-	// 회원정보 수정
+	// 회원정보 수정 (비밀번호가 일치해야 정보 수정 가능)
 	@RequestMapping(value="/updateUser.do")
-	public String updateUser(@ModelAttribute("userVO") UserVO userVO) throws Exception {
-		String inputPw = userVO.getUserPw();
-		String pwd = pwdEncoder.encode(inputPw);
-		userVO.setUserPw(pwd);
+	public String updateUser(@ModelAttribute("userVO") @Valid UserVO userVO) throws Exception {
 		
-		String userPhone = userVO.getUserPhone();    	
-    	String encryptedPhone = cryptoService.encryptData(userPhone);
-    	userVO.setUserPhone(encryptedPhone);
+		UserVO userData = userService.getUserData(userVO);
+		boolean isPwMatch = pwdEncoder.matches(userVO.getUserPw(), userData.getUserPw());
 		
-		userService.updateUser(userVO);
+		log.info("isPwMatch {}", isPwMatch);
+		
+		if(isPwMatch==true) {
+			String userPhone = userVO.getUserPhone();    	
+	    	String encryptedPhone = cryptoService.encryptData(userPhone);
+	    	userVO.setUserPhone(encryptedPhone);
+			
+			userService.updateUser(userVO);
+		} else {
+			return "redirect:UserDetail.do?userId="+userVO.getUserId();
+		}
 		return "redirect:UserDetail.do?userId="+userVO.getUserId();
 	}
 	
