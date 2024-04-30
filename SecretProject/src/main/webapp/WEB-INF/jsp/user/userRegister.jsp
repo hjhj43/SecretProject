@@ -74,18 +74,25 @@
 		const button = document.getElementById('btnRegister');
 		
 		function userRegister(){
-			
 			if (confirm("회원가입을 하시겠습니까?") == true) {
 				if ($("#idCheck").val()=="N"){
 					alert("아이디 중복 검사를 해주세요.");
 				} else {
-					 validation();
 					$("#registUser").submit();
 				}
 			} else {
 				return;
 			}
 		}
+  		
+  		$(document).ready(function() {
+  		    var errors = "${errors}";
+  		    var errorMessages = errors.replace(/^\[|\]$/g, '').split(',');
+
+  		    errorMessages.forEach(function(message) {
+  		        alert(message.trim());
+  		    });
+  		});
 		
 		function CheckId(){
 			
@@ -104,8 +111,8 @@
 					}
 				})
 		}
-		
- 		function validation() {
+			
+  			function validation() {
 			var userId = document.getElementById("userId")
 			var userPw = document.getElementById("userPw")
 			var userName = document.getElementById("userName")
