@@ -12,7 +12,6 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 //import javax.validation.constraints.Pattern;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -116,7 +115,7 @@ public class UserController {
 	
 	// 회원가입
 	@RequestMapping(value="/insertUser.do")
-	public String write( @NotEmpty(message = ".") @ModelAttribute("userVO") @Valid UserVO userVO, BindingResult bindingResult, Model model) throws Exception {
+	public String write( @ModelAttribute("userVO") @Valid UserVO userVO, BindingResult bindingResult, Model model) throws Exception {
 		int result = userService.idCheck(userVO);
 		try {
 			if (result == 1) {
@@ -127,11 +126,12 @@ public class UserController {
 			        log.info("errors={}", bindingResult);
 
 			        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+			        List<String> errorMessages = new ArrayList<>();
 			        
 			        if(fieldErrors.size()>0) {
 			        	for(FieldError error: fieldErrors) {
-			        		model.addAttribute("errors", error.getDefaultMessage());
-			        		System.out.println(error.getDefaultMessage());
+			        		errorMessages.add(error.getDefaultMessage());
+			        		model.addAttribute("errors", errorMessages);
 			        	}
 			        }
 					return "user/userRegister";
@@ -150,7 +150,7 @@ public class UserController {
 		} catch (Exception e) {
 			throw new RuntimeException();
 		}
-		return "redirect:UserList.do";
+		return "redirect:LoginPage.do";
 	}
 	
 	// 아이디 중복 검사
@@ -188,7 +188,7 @@ public class UserController {
 			log.info("로그인 실패 {}", userData);
 			return "user/userLogin";
 		}
-		return "redirect:UserList.do";
+		return "redirect:BoardRegister.do";
 	}
 	
 /*	// 로그아웃
