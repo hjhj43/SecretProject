@@ -173,6 +173,7 @@ public class UserController {
 		log.info("로그인 - start");
 		
 		log.info("userVO {}", userVO);
+		
 		session.getAttribute("sessionUserData");
 		UserVO userData = userService.getUserData(userVO);
 		boolean isPwMatch = pwdEncoder.matches(userVO.getUserPw(), userData.getUserPw());
@@ -191,13 +192,12 @@ public class UserController {
 		return "redirect:BoardRegister.do";
 	}
 	
-/*	// 로그아웃
+	// 로그아웃
 	@RequestMapping(value="/logout.do")
 	public String logout (HttpSession session) throws Exception {
 		session.invalidate();
 		return "redirect:/";
-	}*/
-
+	}
 	
 	// 회원정보 수정 (비밀번호가 일치해야 정보 수정 가능)
 	@RequestMapping(value="/updateUser.do")

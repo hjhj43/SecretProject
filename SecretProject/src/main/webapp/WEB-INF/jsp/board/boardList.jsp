@@ -20,6 +20,7 @@
     <br/>
     <h1 class="text-center">Board List</h1>
     <br/>
+		<button onclick="location='logout.do'">로그아웃</button>
     <br/>
     <div class="container">
 		<form id="boardForm" name="boardForm" method="post">
