@@ -20,7 +20,7 @@
 	<!-- 게시글 삽입 -->
 	<insert id="insertBoard" parameterType="boardVO">
 		INSERT INTO board(BOARD_SN, BOARD_TITLE, BOARD_CONTENT, BOARD_REGISTER_ID, BOARD_DATE)
-		VALUES(NEXTVAL(board_sn),#{boardTitle},#{boardContent},'anna429',now())
+		VALUES(NEXTVAL(board_sn),#{boardTitle},#{boardContent},#{boardRegisterId},now())
 	</insert>
 	
 	<!-- 게시글 수정 -->

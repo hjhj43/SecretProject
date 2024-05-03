@@ -38,6 +38,10 @@
 							<td><input name="boardTitle" type="text" id="boardTitle"></td>
 					</tr>
 					<tr>
+						<td><input name="boardRegisterId" type="hidden" value="${sessionUserData.userId}"
+							class="form-control" /></td>
+					</tr>
+					<tr>
 						<th>내용</th>
 							<td><textarea name="boardContent" id="boardContent">내용을 입력하세요</textarea>
                     </tr>
