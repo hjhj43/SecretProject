@@ -1,14 +1,11 @@
 package secretproject.user.dao;
 
-import java.util.List;
-
 import javax.annotation.PostConstruct;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import secretproject.board.vo.BoardVO;
 import secretproject.user.serviceimpl.UserMapper;
 import secretproject.user.vo.UserVO;
 
@@ -23,10 +20,6 @@ public class UserDAO {
 	public void init() {
 		mapper = sqlSession.getMapper(UserMapper.class);
 	}
-		
-		public List<UserVO> selectUserList(UserVO userVO) throws Exception {
-			return mapper.selectUserList(userVO);
-		}
 		
 		public UserVO selectDetail(String userId) throws Exception {
 			return mapper.selectDetail(userId);
@@ -48,12 +41,5 @@ public class UserDAO {
 		public void updateUser(UserVO userVO) throws Exception {
 			mapper.updateUser(userVO);
 		}
-		
-		public void deleteUser(String userId) throws Exception {
-			mapper.deleteUser(userId);
-		}
 
-		public int getTotCntUser() throws Exception {
-			return mapper.getTotCntUser();
-		}
 	}

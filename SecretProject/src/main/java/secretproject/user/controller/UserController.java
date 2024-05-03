@@ -40,7 +40,7 @@ public class UserController {
 	
 	@Autowired(required=false)
 	@Qualifier("bcryptPasswordEncoder")
-	private BCryptPasswordEncoder pwdEncoder;
+	private BCryptPasswordEncoder pwEncoder;
 	
 	@Resource(name = "beanValidator")
 	protected DefaultBeanValidator beanValidator;
@@ -48,33 +48,7 @@ public class UserController {
 	@Resource(name = "cryptoService")
 	private CryptoService cryptoService;
 	
-	//회원정보 조회
-	@RequestMapping(value = "/UserList.do")
-	public String selectUserList(@ModelAttribute("userVO") UserVO userVO, Model model) throws Exception {
-		
-		int userCnt = userService.getTotCntUser();
-		
-		userVO.setTotalRowCount(userCnt);
-		userVO.setUpPagination();
-		
-		List<UserVO> userList = userService.selectUserList(userVO);
-		
-		for(UserVO userVo : userList) {
-			String userPhone = userVo.getUserPhone();
-			String decryptedPhone = cryptoService.decryptData(userPhone);
-			String maskPhone = StringUtils.phoneMasking(decryptedPhone);
-			userVo.setUserPhone(maskPhone);
-		}
-		
-		DefaultVO pagingVO = userVO;
-		
-		model.addAttribute("userList", userList);
-		model.addAttribute("userPagingVO", pagingVO);
-		
-		return "user/userList";
-	}
-	
-	// 회원정보 상세페이지
+	// 회원정보 상세페이지 (user, admin 접근 가능)
 	@RequestMapping(value="/UserDetail.do")
 	public String viewUser (Model model, HttpServletRequest request) throws Exception{
 		String userId = request.getParameter("userId");
@@ -88,13 +62,13 @@ public class UserController {
 		return "user/userDetail";
 	}
 	
-	// 회원가입 페이지
+	// 회원가입 페이지 (모든 사용자 접근 가능)
 	@RequestMapping(value="/UserRegister.do")
 	public String userRegister() {
 		return "user/userRegister";
 	}
 	
-	// 회원가입
+	// 회원가입 (모든 사용자 접근 가능)
 	@RequestMapping(value="/insertUser.do")
 	public String write( @ModelAttribute("userVO") @Valid UserVO userVO, BindingResult bindingResult, Model model) throws Exception {
 		int result = userService.idCheck(userVO);
@@ -119,7 +93,7 @@ public class UserController {
 			    }
 
 				String inputPw = userVO.getUserPw();
-				String pw = pwdEncoder.encode(inputPw);
+				String pw = pwEncoder.encode(inputPw);
 				userVO.setUserPw(pw);
 				
 				String userPhone = userVO.getUserPhone();    	
@@ -134,7 +108,7 @@ public class UserController {
 		return "redirect:LoginPage.do";
 	}
 	
-	// 아이디 중복 검사
+	// 아이디 중복 검사 (모든 사용자 접근 가능)
 	@RequestMapping(value="/idCheck.do")
 	@ResponseBody
 	public int idCheck(UserVO userVO) throws Exception {
@@ -142,22 +116,22 @@ public class UserController {
 		return result;
 	}
 	
-	// 로그인 페이지
+	// 로그인 페이지 (모든 사용자 접근 가능)
 	@RequestMapping(value="/LoginPage.do")
 	public String userLogin() {
 		return "user/userLogin";
 	}
 	
-	// 로그인
+	// 로그인 (모든 사용자 접근 가능)
 	@RequestMapping(value="/login.do")
 	public String login(UserVO userVO, HttpSession session, RedirectAttributes redirectAttributes) throws Exception {
-		log.info("로그인 - start");
 		
+		log.info("로그인 - start");
 		log.info("userVO {}", userVO);
 		
 		session.getAttribute("sessionUserData");
 		UserVO userData = userService.getUserData(userVO);
-		boolean isPwMatch = pwdEncoder.matches(userVO.getUserPw(), userData.getUserPw());
+		boolean isPwMatch = pwEncoder.matches(userVO.getUserPw(), userData.getUserPw());
 		
 		log.info("isPwMatch {}", isPwMatch);
 		
@@ -173,19 +147,19 @@ public class UserController {
 		return "redirect:BoardList.do";
 	}
 	
-	// 로그아웃
+	// 로그아웃 (user, admin 접근 가능)
 	@RequestMapping(value="/logout.do")
 	public String logout (HttpSession session) throws Exception {
 		session.invalidate();
 		return "redirect:/";
 	}
 	
-	// 회원정보 수정 (비밀번호가 일치해야 정보 수정 가능)
+	// 회원정보 수정 (비밀번호가 일치해야 정보 수정 가능, user/admin 접근 가능)
 	@RequestMapping(value="/updateUser.do")
 	public String updateUser(@ModelAttribute("userVO") @Valid UserVO userVO) throws Exception {
 		
 		UserVO userData = userService.getUserData(userVO);
-		boolean isPwMatch = pwdEncoder.matches(userVO.getUserPw(), userData.getUserPw());
+		boolean isPwMatch = pwEncoder.matches(userVO.getUserPw(), userData.getUserPw());
 		
 		log.info("isPwMatch {}", isPwMatch);
 		
@@ -200,13 +174,4 @@ public class UserController {
 		}
 		return "redirect:UserDetail.do?userId="+userVO.getUserId();
 	}
-	
-	// 회원정보 삭제
-	@RequestMapping(value="/deleteUser.do")
-	public String deleteUser(HttpServletRequest request) throws Exception {
-		String userId = request.getParameter("userId");
-		userService.deleteUser(userId);
-		return "redirect:UserList.do";
-	}
-
 }

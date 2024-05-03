@@ -1,14 +1,10 @@
 package secretproject.user.serviceimpl;
 
-import java.util.List;
-
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
 import secretproject.user.vo.UserVO;
 
 @Mapper
 public interface UserMapper {
-	
-	public List<UserVO> selectUserList(UserVO userVO) throws Exception;
 	
 	public UserVO selectDetail(String userId) throws Exception;
 	
@@ -19,9 +15,5 @@ public interface UserMapper {
 	public UserVO getUserData(UserVO userVO) throws Exception;
 	 
 	public void updateUser(UserVO userVO) throws Exception;
-	
-	public void deleteUser(String userId) throws Exception;
-
-	public int getTotCntUser() throws Exception;
 
 }
