@@ -13,8 +13,10 @@
 
 	<!-- Paging Head -->
 	<sql id="pagingHead">
-		SELECT * FROM
-		(SELECT A.*,ROWNUM() AS RNUM FROM (
+		SELECT 
+			* 
+		FROM
+			(SELECT A.*,ROWNUM() AS RNUM FROM (
 	</sql>
 
 
