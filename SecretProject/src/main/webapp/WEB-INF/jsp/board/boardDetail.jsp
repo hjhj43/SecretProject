@@ -42,7 +42,7 @@
 					<tr>
 						<th>제목</th>
 						<td><input name="boardTitle" type="text" value="${boardList.boardTitle}"
-							class="form-control" readonly /></td>
+							class="form-control" /></td>
 					</tr>
 					<tr>
 						<th>내용</th>
@@ -68,8 +68,8 @@
 
 	function modifyBoard(){
 	if (confirm("정말 수정하시겠습니까?") == true) {
-		$("#viewBoard").submit();
-		alert("수정되었습니다");
+			$("#viewBoard").submit();
+			alert("수정되었습니다");
 	} else {
 		return;
 	}

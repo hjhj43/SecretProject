@@ -4,9 +4,9 @@ import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -17,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import secretproject.board.service.BoardService;
 import secretproject.board.vo.BoardVO;
 import secretproject.cmmn.vo.DefaultVO;
+import secretproject.user.service.UserService;
+import secretproject.user.vo.UserVO;
 
 @Slf4j
 @Validated
@@ -26,6 +28,8 @@ public class BoardController {
 	@Resource(name = "boardService")
 	private BoardService boardService;
 	
+	@Resource(name = "userService")
+	private UserService userService;
 	
 //	@Autowired                        															   //이방법으로 의존성 주입도 가능함.
 //	private BoardService boardService;
@@ -80,26 +84,45 @@ public class BoardController {
 	
 	// 게시글 작성
 	@RequestMapping(value="/insertBoard.do")
-	public String write(  @NotEmpty(message = "Input movie list cannot be empty.") @ModelAttribute("boardVO") @Valid BoardVO boardVO) throws Exception {
+	public String write(@ModelAttribute("boardVO") @Valid BoardVO boardVO) throws Exception {
 		
 		boardService.insertBoard(boardVO);
-		
 		
 		return "redirect:BoardList.do";
 	}
 	
-	// 게시글 수정
+	// 게시글 수정 (게시글 작성자만 수정 가능)
 	@RequestMapping(value="/updateBoard.do")
-	public String updateBoard(@ModelAttribute("boardVO") BoardVO boardVO) throws Exception {
-		boardService.updateBoard(boardVO);
+	public String updateBoard(@ModelAttribute("boardVO") BoardVO boardVO, HttpSession session) throws Exception {
+		
+		session.getAttribute("sessionBoardData");
+		BoardVO boardData = boardService.getBoardData(boardVO);
+		String boardRegisterId = boardData.getBoardRegisterId();
+		
+		UserVO sessionUserData = (UserVO) session.getAttribute("sessionUserData");
+		String userId = sessionUserData.getUserId();
+		
+		if(boardRegisterId.equals(userId)) {
+			boardService.updateBoard(boardVO);
+		}
 		return "redirect:BoardDetail.do?boardSn="+boardVO.getBoardSn();
 	}
 	
-	// 게시글 삭제
+	// 게시글 삭제 (게시글 작성자와 admin만 삭제 가능)
 	@RequestMapping(value="/deleteBoard.do")
-	public String deleteBoard(HttpServletRequest request) throws Exception {
+	public String deleteBoard(HttpServletRequest request, HttpSession session, BoardVO boardVO) throws Exception {
 		int boardSn = Integer.parseInt(request.getParameter("boardSn"));
-		boardService.deleteBoard(boardSn);
+		
+		UserVO sessionUserData = (UserVO) session.getAttribute("sessionUserData");
+		String userId = sessionUserData.getUserId();
+		int userAuthNum = sessionUserData.getUserAuthNum();
+		
+		BoardVO boardData = boardService.getBoardData(boardVO);
+	    String boardRegisterId = boardData.getBoardRegisterId();
+	    
+	    if(boardRegisterId.equals(userId) || userAuthNum == 1) {
+			boardService.deleteBoard(boardSn);
+	    }
 		return "redirect:BoardList.do";
 	}
 }

@@ -54,5 +54,7 @@ public class BoardDAO {
 		return mapper.getTotCntBoard();
 	}
 	
-	
+	public BoardVO getBoardData(BoardVO boardVO) throws Exception {
+		return mapper.getBoardData(boardVO);
+	}
 }

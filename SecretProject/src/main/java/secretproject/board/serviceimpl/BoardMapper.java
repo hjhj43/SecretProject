@@ -21,4 +21,6 @@ public interface BoardMapper {
 
 	public int getTotCntBoard() throws Exception;
 
+	public BoardVO getBoardData(BoardVO boardVO) throws Exception;
+
 }

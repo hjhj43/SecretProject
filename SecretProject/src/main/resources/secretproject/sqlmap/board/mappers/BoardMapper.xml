@@ -73,4 +73,15 @@
 			BOARD
 	</select>
 	
+	<!-- 게시글 데이터 가져오기 -->
+	<select id="getBoardData" resultType="boardVO">
+		SELECT 
+			BOARD_SN, 
+			BOARD_REGISTER_ID
+		FROM 
+			board
+		WHERE 
+			BOARD_SN = #{boardSn}
+	</select>
+	
 </mapper>

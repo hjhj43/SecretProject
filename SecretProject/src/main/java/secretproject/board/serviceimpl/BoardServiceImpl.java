@@ -59,4 +59,8 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 		return totalCountOfBoard;
 	}
 
+	@Override
+	public BoardVO getBoardData(BoardVO boardVO) throws Exception {
+		return boardDAO.getBoardData(boardVO);
+	}
 }
