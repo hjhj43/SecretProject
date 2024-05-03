@@ -36,14 +36,13 @@
         </property>
     </bean> -->
     
-    <mvc:interceptors>
+        <mvc:interceptors>
     	<mvc:interceptor>
     		<mvc:mapping path="/**" />
-     		<mvc:exclude-mapping path="${exclude.loginpage}" />
+    		<mvc:exclude-mapping path="${exclude.loginpage}" />
     		<mvc:exclude-mapping path="${exclude.login}" />
-    		<mvc:exclude-mapping path="${exclude.boardlist}" />
     		<mvc:exclude-mapping path="${exclude.insertuser}" />
-			<mvc:exclude-mapping path="${exclude.register}" />
+			<mvc:exclude-mapping path="${exclude.userregister}" />
 			<mvc:exclude-mapping path="${exclude.idcheck}" />
     		<ref bean = "AuthenticInterceptor" />
     	</mvc:interceptor>
