@@ -1,5 +1,8 @@
 package secretproject.cmmn;
 
+import java.util.Arrays;
+
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -89,6 +92,21 @@ public class StringUtils {
 		}
 		
 		return return_name;
+	}
+	
+	public static String phoneMasking(String userPhone) {
+	    String regex = "(\\d{2,3})-?(\\d{3,4})-?(\\d{4})$";
+
+	    Matcher matcher = Pattern.compile(regex).matcher(userPhone);
+	    if(matcher.find()) {
+	        String target = matcher.group(2);
+	        int length = target.length();
+	        char[] c = new char[length];
+	        Arrays.fill(c, '*');
+
+	        return userPhone.replace(target, String.valueOf(c));
+	    }
+	    return userPhone;
 	}
 
 }
