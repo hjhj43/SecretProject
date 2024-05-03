@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -75,13 +76,13 @@ public class UtilTest {
 
 	//실패하는 테스트.
 	
-//	
-//	@Test
-//	@DisplayName("김이  -> *김")
-//	void wrongMaskName() {
-//		assertEquals("*이", StringUtils.getNameMaskedType("김이"), "한국어 이름 두글자의 경우 성 뒤에 이름 한글자가 마스킹이 되어야 합니다 korean name should be masked");
-//
-//	}
+	@Test
+	@DisplayName("김이  -> *김")
+	void wrongMaskName() {
+		assertEquals("*이", StringUtils.getNameMaskedType("김이"), "한국어 이름 두글자의 경우 성 뒤에 이름 한글자가 마스킹이 되어야 합니다 korean name should be masked");
+
+	}
+	
 	
 	
 }

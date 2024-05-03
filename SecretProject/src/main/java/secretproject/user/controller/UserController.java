@@ -1,10 +1,7 @@
 package secretproject.user.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springmodules.validation.commons.DefaultBeanValidator;
 
 import lombok.extern.slf4j.Slf4j;
+import secretproject.cmmn.StringUtils;
 import secretproject.cmmn.service.CryptoService;
 import secretproject.cmmn.vo.DefaultVO;
 import secretproject.user.service.UserService;
@@ -64,7 +62,7 @@ public class UserController {
 		for(UserVO userVo : userList) {
 			String userPhone = userVo.getUserPhone();
 			String decryptedPhone = cryptoService.decryptData(userPhone);
-			String maskPhone = phoneMasking(decryptedPhone);
+			String maskPhone = StringUtils.phoneMasking(decryptedPhone);
 			userVo.setUserPhone(maskPhone);
 		}
 		
@@ -84,27 +82,10 @@ public class UserController {
 		UserVO userVO = userService.selectDetail(userId);
 		String userPhone = userVO.getUserPhone();
 		String decryptedPhone = cryptoService.decryptData(userPhone);
-//		String maskPhone = phoneMasking(decryptedPhone);
 		userVO.setUserPhone(decryptedPhone);
 		
 		model.addAttribute("userList", userVO);
 		return "user/userDetail";
-	}
-	
-	// 전화번호 마스킹
-	public static String phoneMasking(String userPhone) throws Exception {
-	    String regex = "(\\d{2,3})-?(\\d{3,4})-?(\\d{4})$";
-
-	    Matcher matcher = Pattern.compile(regex).matcher(userPhone);
-	    if(matcher.find()) {
-	        String target = matcher.group(2);
-	        int length = target.length();
-	        char[] c = new char[length];
-	        Arrays.fill(c, '*');
-
-	        return userPhone.replace(target, String.valueOf(c));
-	    }
-	    return userPhone;
 	}
 	
 	// 회원가입 페이지
@@ -189,7 +170,7 @@ public class UserController {
 			log.info("로그인 실패 {}", userData);
 			return "user/userLogin";
 		}
-		return "redirect:BoardRegister.do";
+		return "redirect:BoardList.do";
 	}
 	
 	// 로그아웃
