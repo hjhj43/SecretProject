@@ -22,6 +22,7 @@
     <br/>
     <h1 class="text-center">User List</h1>
     <br/>
+		<button onclick="location='logout.do'">로그아웃</button>
     <br/>
     <div class="container">
 		<form id="userForm" name="userForm" method="post">
