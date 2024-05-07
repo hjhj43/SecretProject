@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form"   uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ui"     uri="http://egovframework.gov/ctl/ui"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <title>Board List</title>
@@ -19,10 +19,6 @@
 <body>
     <br/>
     <h1 class="text-center">Board List</h1>
-    <br/>
-		<button onclick="location='logout.do'">로그아웃</button>
-		<button onclick="location='UserList.do'">유저리스트</button>
-    <br/>
     <div class="container">
 		<form id="boardForm" name="boardForm" method="post">
         <table class="table table-hover table-striped text-center" style="border:1px solid;">
