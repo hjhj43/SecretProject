@@ -24,7 +24,7 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 
 </head>
-<body>
+<body onload="checkIds()">
     <br />
     <h1 class="text-center">Board Detail</h1>
     <br />
@@ -59,21 +59,37 @@
 		 crossorigin="anonymous"></script>
 	<div>
 		<button onclick="location='BoardList.do'">이전</button>
-		<button onclick="modifyBoard()">수정</button>
-		<button onclick="deleteBoard()">삭제</button>
+		<button id="modifyButton" onclick="modifyBoard()" disabled>수정</button>
+		<button id="deleteButton" onclick="deleteBoard()" disabled>삭제</button>
 	</div>
 	<br>
 </body>
 <script>
 
-	function modifyBoard(){
-	if (confirm("정말 수정하시겠습니까?") == true) {
-			$("#viewBoard").submit();
-			alert("수정되었습니다");
-	} else {
-		return;
+ 	function checkIds() {
+		var boardRegisterId = "${sessionBoardData.boardRegisterId}";
+	    var userId = "${sessionUserData.userId}";
+	    var userAuth = "${sessionUserData.userAuthNum}";
+	    
+	    if (boardRegisterId === userId) {
+	        document.getElementById("modifyButton").disabled = false;
+	        document.getElementById("deleteButton").disabled = false;
+	    } else if (userAuth == 1) {
+	        document.getElementById("deleteButton").disabled = false;
+	    } else {
+	        document.getElementById("modifyButton").disabled = true;
+	        document.getElementById("deleteButton").disabled = true;
+	    }
 	}
-}
+	
+	function modifyBoard(){
+		if (confirm("정말 수정하시겠습니까?") == true) {
+				$("#viewBoard").submit();
+				alert("수정되었습니다");
+		} else {
+			return;
+		}
+	}
 
 	function deleteBoard(){
 		var boardSn = ${boardList.boardSn};
