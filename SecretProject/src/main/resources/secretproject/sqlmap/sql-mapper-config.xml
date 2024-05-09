@@ -11,6 +11,7 @@
 		<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
 		<typeAlias alias="boardVO" type="secretproject.board.vo.BoardVO"/>
 		<typeAlias alias="userVO" type="secretproject.user.vo.UserVO"/>
+		<typeAlias alias="commentVO" type="secretproject.comment.vo.CommentVO"/>
     </typeAliases>
 
 <!--     
