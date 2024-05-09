@@ -24,7 +24,7 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 
 </head>
-<body onload="checkIds()">
+<body>
     <br />
     <h1 class="text-center">Board Detail</h1>
     <br />
@@ -65,9 +65,9 @@
 	<br>
 </body>
 <script>
-
- 	function checkIds() {
-		var boardRegisterId = "${sessionBoardData.boardRegisterId}";
+	
+	$(document).ready(function() {
+		var boardRegisterId = "${boardList.boardRegisterId}";
 	    var userId = "${sessionUserData.userId}";
 	    var userAuth = "${sessionUserData.userAuthNum}";
 	    
@@ -80,7 +80,7 @@
 	        document.getElementById("modifyButton").disabled = true;
 	        document.getElementById("deleteButton").disabled = true;
 	    }
-	}
+	});
 	
 	function modifyBoard(){
 		if (confirm("정말 수정하시겠습니까?") == true) {
@@ -103,4 +103,6 @@
 		}
 	}
 </script>
+<jsp:include page="/WEB-INF/jsp/comment/commentRegister.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/jsp/comment/commentList.jsp"></jsp:include>
 </html>
