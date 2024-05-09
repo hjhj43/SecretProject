@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import secretproject.board.service.BoardService;
 import secretproject.board.vo.BoardVO;
 import secretproject.cmmn.vo.DefaultVO;
-import secretproject.user.service.UserService;
 import secretproject.user.vo.UserVO;
 
 @Slf4j
@@ -27,9 +26,6 @@ public class BoardController {
 	
 	@Resource(name = "boardService")
 	private BoardService boardService;
-	
-	@Resource(name = "userService")
-	private UserService userService;
 	
 //	@Autowired                        															   //이방법으로 의존성 주입도 가능함.
 //	private BoardService boardService;
@@ -68,6 +64,7 @@ public class BoardController {
 	// 게시글 상세페이지
 	@RequestMapping(value="/BoardDetail.do")
 	public String viewBoard(Model model, HttpServletRequest request) throws Exception{
+		
 		int boardSn = Integer.parseInt(request.getParameter("boardSn"));
 		
 		BoardVO boardVO = boardService.selectDetail(boardSn);
@@ -87,23 +84,23 @@ public class BoardController {
 	public String write(@ModelAttribute("boardVO") @Valid BoardVO boardVO) throws Exception {
 		
 		boardService.insertBoard(boardVO);
-		
+
 		return "redirect:BoardList.do";
 	}
 	
 	// 게시글 수정 (게시글 작성자만 수정 가능)
 	@RequestMapping(value="/updateBoard.do")
-	public String updateBoard(@ModelAttribute("boardVO") BoardVO boardVO, HttpSession session) throws Exception {
+	public String updateBoard(@ModelAttribute("boardVO") @Valid BoardVO boardVO, HttpServletRequest request, HttpSession session) throws Exception {
 		
-		session.getAttribute("sessionBoardData");
 		BoardVO boardData = boardService.getBoardData(boardVO);
 		String boardRegisterId = boardData.getBoardRegisterId();
+		int boardSn = boardData.getBoardSn();
 		
 		UserVO sessionUserData = (UserVO) session.getAttribute("sessionUserData");
 		String userId = sessionUserData.getUserId();
 		
-		if(boardRegisterId.equals(userId)) {
-			boardService.updateBoard(boardVO);
+		if(boardRegisterId.equals(userId) && boardSn != 0) {
+			boardService.updateBoard(boardData);
 		}
 		return "redirect:BoardDetail.do?boardSn="+boardVO.getBoardSn();
 	}
@@ -111,17 +108,19 @@ public class BoardController {
 	// 게시글 삭제 (게시글 작성자와 admin만 삭제 가능)
 	@RequestMapping(value="/deleteBoard.do")
 	public String deleteBoard(HttpServletRequest request, HttpSession session, BoardVO boardVO) throws Exception {
-		int boardSn = Integer.parseInt(request.getParameter("boardSn"));
 		
+		// session에 있는 userData 가져오기
 		UserVO sessionUserData = (UserVO) session.getAttribute("sessionUserData");
 		String userId = sessionUserData.getUserId();
 		int userAuthNum = sessionUserData.getUserAuthNum();
 		
+		// boardVO에 있는 boardData 가져오기
 		BoardVO boardData = boardService.getBoardData(boardVO);
 	    String boardRegisterId = boardData.getBoardRegisterId();
+	    int dataBoardSn = boardData.getBoardSn();
 	    
 	    if(boardRegisterId.equals(userId) || userAuthNum == 1) {
-			boardService.deleteBoard(boardSn);
+			boardService.deleteBoard(dataBoardSn);
 	    }
 		return "redirect:BoardList.do";
 	}
