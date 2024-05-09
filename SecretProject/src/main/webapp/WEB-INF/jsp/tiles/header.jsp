@@ -40,7 +40,6 @@
 	function initialize() {
 		changeLogoutBtn();
 		removeListBtn();
-		checkIds();
 	}
 
 </script>
